@@ -30,7 +30,6 @@ screen.fill((0,0,0)) # change the background to black
 # .blit => block transfer (it blit a surface into another surface)
 
 # Create a new instance of player
-player = Player()
 
 #### Creating The Game loop
 # => frames => stops the frames when the player is loss (the human are k¡lled) and when the player closes the Window
@@ -83,9 +82,9 @@ while running:
 
 	##player_1 = input("Enter the name of the player 1:")##
 
-	hangman = {0:pygame.draw.line(screen,(150,75,0),(200,350),(400,350),10), 1:pygame.draw.line(screen,(150,75,0),(300,350),(300,100),10),2:pygame.draw.line(screen,(150,75,0),(300,100),(400,100),10),
-	3:pygame.draw.line(screen,(150,75,0),(400,100),(400,150),10),4:pygame.draw.circle(screen,(250,250,250),(400,180),30,5),5:pygame.draw.line(screen,(250,250,250),(400,210),(400,270),5),6:pygame.draw.line(screen,(250,250,250),
-	(400,240),(370,210),5), 7:pygame.draw.line(screen,(250,250,250),(400,240),(430,210),5), 8:pygame.draw.line(screen,(250,250,250),(400,270),(370,300),5),9:pygame.draw.line(screen,(250,250,250),(400,270),(430,300),5)}
+	hangman = {0: lambda: pygame.draw.line(screen, (150, 75, 0), (200, 350), (400, 350), 10), 1: lambda: pygame.draw.line(screen, (150, 75, 0), (300, 350), (300, 100), 10), 2: lambda: pygame.draw.line(screen, (150, 75, 0), (300, 100), (400, 100), 10),
+            3: lambda: pygame.draw.line(screen, (150, 75, 0), (400, 100), (400, 150), 10), 4: lambda: pygame.draw.circle(screen, (250, 250, 250), (400, 180), 30, 5), 5: lambda: pygame.draw.line(screen, (250, 250, 250), (400, 210), (400, 270), 5), 6: lambda: pygame.draw.line(screen, (250, 250, 250),
+			(400, 240), (370, 210), 5), 7: lambda: pygame.draw.line(screen, (250, 250, 250), (400, 240), (430, 210), 5), 8: lambda: pygame.draw.line(screen, (250, 250, 250), (400, 270), (370, 300), 5), 9: lambda: pygame.draw.line(screen, (250, 250, 250), (400, 270), (430, 300), 5)}
 	##^
 	pygame.display.update()
 
@@ -154,9 +153,12 @@ while running:
 		else:
 			print("+1")
 			hangindex+=1
-			if hangindex == 0:
-				pygame.draw.line(screen,(150,75,0),(200,350),(400,350),10)
-				print("hanging")
+			if(hangindex>-1):
+				print("hang")
+				#pulls from lambda
+				f = hangman.get(hangindex)
+				#call function:
+				f()
 		##this ends program if user is wrong
 		if hangindex == 9:
 			print("done")
@@ -171,5 +173,6 @@ while running:
 	output = font.render(guessStr,True,(0,0,0))
 	pygame.draw.rect(screen,(0,0,0),pygame.Rect(0,375,800,225))
 	screen.blit(output,(200,400))
+	pygame.display.update()
 
 pygame.quit()
