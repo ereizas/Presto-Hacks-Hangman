@@ -1,5 +1,4 @@
 import pygame
-python3 -m pip install -U pygame --user
 max_score = int(input("Enter the score needed to win:"))
 p1score = 0
 p2score = 0

@@ -1,6 +1,7 @@
 import pygame
 import time
 import random
+from pygame.event import wait
 from pygame.locals import *
 # The Design of the Game
 # when the user reveil two letters will give them a bonus of one letter
@@ -10,8 +11,7 @@ from pygame.locals import (
 	K_ESCAPE,
 	QUIT,
 	KEYDOWN,
-	K_SPACE,
-	
+	K_SPACE
 )
 
 # Initialize the game
@@ -27,19 +27,8 @@ screen = pygame.display.set_mode((SCREEN_WIDTH,SCREEN_HEIGHT))
 
 screen.fill((0,0,0)) # change the background to black
 
-
-
 # .blit => block transfer (it blit a surface into another surface)
 
-
-
-# Create a sprite object for Player (not sure if needed)
-class Player(pygame.sprite.Sprite):
-	def __init__(self):
-		super(Player, self).__init__()
-		self.surface = pygame.Surface((75,25))
-		self.surface.fill((202,228,241))
-		self.rect = self.surface.get_rect()
 # Create a new instance of player
 player = Player()
 
@@ -69,11 +58,14 @@ computerWords = [#artists
 	"quarter note","eigth note","half note","whole note","scale","symphony","orchestra","band","accent","beats per minute","dynamics","forte","vibrato"]]
 # Main loop
 while running:
+	print("loop outer")
+
 	pygame.display.set_caption("Hangmoo")
 	font = pygame.font.SysFont("helvetica",30) #or verdana
 	screen.fill((250,0,0))
 	screen.blit(font.render("Hello",True,(250,250,250)),(300,20))
-	# Look  at every event in the queue and start the event handler
+	pygame.display.update()
+	# Look at every event in the queue and start the event handler
 	for event in pygame.event.get(): # pygame.event it has all the events associated with it
 		# check if the player hit the key ?
 		if event.type == KEYDOWN:
@@ -87,17 +79,15 @@ while running:
 		# Check if the user click into the Close Button ? if so , stop the loop
 		elif event.type == QUIT:
 			running = False
-	
+
 
 	##player_1 = input("Enter the name of the player 1:")##
-	
 
 	hangman = {0:pygame.draw.line(screen,(150,75,0),(200,350),(400,350),10), 1:pygame.draw.line(screen,(150,75,0),(300,350),(300,100),10),2:pygame.draw.line(screen,(150,75,0),(300,100),(400,100),10),
 	3:pygame.draw.line(screen,(150,75,0),(400,100),(400,150),10),4:pygame.draw.circle(screen,(250,250,250),(400,180),30,5),5:pygame.draw.line(screen,(250,250,250),(400,210),(400,270),5),6:pygame.draw.line(screen,(250,250,250),
 	(400,240),(370,210),5), 7:pygame.draw.line(screen,(250,250,250),(400,240),(430,210),5), 8:pygame.draw.line(screen,(250,250,250),(400,270),(370,300),5),9:pygame.draw.line(screen,(250,250,250),(400,270),(430,300),5)}
 	##^
-
-	
+	pygame.display.update()
 
 	##print(F"#{player_1} Score => {str(p1score)} ")##
 	answer = []
@@ -109,8 +99,6 @@ while running:
 		for i in arr:
 			res+=i
 		return res
-	
-
 
 	#makes sure the randomly generated category arrays are not empty
 	randInd1 = random.randint(0,3)
@@ -125,11 +113,12 @@ while running:
 		elif char == " ":
 			guess.append(" ")
 	computerWords[randInd1].remove(computerWords[randInd1][randInd2])
-	
+
 	guessStr = arrToStr(guess)
 	output = font.render(guessStr,True,(255,255,255))
 	pygame.draw.rect(screen,(0,0,0),pygame.Rect(0,375,800,225))
 	screen.blit(output,(200,400))
+	pygame.display.update()
 
 	while not correct:
 		letter_guess = ""
@@ -139,6 +128,7 @@ while running:
 					letter_guess = pygame.key.name(event.key)
 					print(letter_guess)
 		if letter_guess in answer:
+			print("if")
 			index = 0
 			for char in answer:
 				if char==letter_guess.lower() or char==letter_guess.upper():
@@ -147,6 +137,7 @@ while running:
 
 			guessStr = arrToStr(guess)
 			output = font.render(guessStr,True,(0,0,0))
+			print("draw")
 			pygame.draw.rect(screen,(0,0,0),pygame.Rect(0,375,800,225))
 			screen.blit(output,(200,400))
 
@@ -171,7 +162,10 @@ while running:
 			print("done")
 			compScore+=1
 			screen.fill((0,0,0))
+			pygame.display.update()
 			break
+		print("Update display")
+		pygame.display.update()
 
 	guessStr = arrToStr(guess)
 	output = font.render(guessStr,True,(0,0,0))
